@@ -1,0 +1,66 @@
+﻿@model AccessPointControlClient.Models.IndividualsModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Registered individuals";
+}
+
+<div class="container generic-container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn form-button" id="newPersonButton">New</button>
+                    </div>
+                    <div class="col-6">
+                        @using (Html.BeginForm("DeletePerson", "Individuals", FormMethod.Post))
+                        {
+                            @Html.Hidden("selectedPersonId", Model.SelectedIndividual.PersonId)
+                            <input type="submit" value="Delete" class="btn form-button" />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="list-container">
+                @foreach (SimpleIndividual ind in Model.Individuals)
+                {
+                    @using (Html.BeginForm("SelectIndividual", "Individuals", FormMethod.Post))
+                    {
+                        @Html.Hidden("selectedPersonId", ind.PersonId)
+                        <input type="submit" value="@ind.FullName" class="list-item @(Model.SelectedIndividual.PersonId == ind.PersonId ? "active" : "")" />
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div id="individual-details-form" style="@(Model.SelectedIndividual == null ? "display:none;" : "")">
+                <partial name="Individuals_Details.cshtml" for="@Model">
+            </div>
+            <div id="individual-registration-form" style="display:none">
+                <partial name="Individuals_Registration.cshtml" for="@Model">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(function () {
+
+                $('#newPersonButton').click(function (event) {
+                    $('#individual-details-form').css('display', 'none');
+                    $('#individual-registration-form').css('display', 'block');
+                });
+            });
+        });
+        $('#counter-container').ready(function () {
+            setInterval(function () {
+                var counterValue = parseInt($('#counter-container').text())
+                if (counterValue != 0) {
+                    $('#counter-container').text(counterValue - 1);
+                }
+            }, 1000);
+        });
+    </script>
+}

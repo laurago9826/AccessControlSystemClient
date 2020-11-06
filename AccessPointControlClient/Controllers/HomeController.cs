@@ -1,64 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using AccessPointControlClient.Models;
 using System.Net.Http;
 using AccessPointControlClient.HttpClientHelpers;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
 namespace AccessPointControlClient.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
-        private readonly IHttpClient httpClient;
-        private const string PEOPLE_ENDPOINT = "people/people";
 
+        private const string USERINFO_ENDPOINT = "accounts/user-info";
+        private const string CHANGE_PASSWORD_ENDPOINT = "accounts/change-password";
+
+        private readonly IHttpClient httpClient;
         public HomeController(IHttpClient httpClient)
         {
             this.httpClient = httpClient;
         }
 
-        [Authorize]
-        public IActionResult Index()
+        public IActionResult Account()
         {
-            return View();
+            if(httpClient.GetUserInfo() == null) 
+            {
+                HttpResponseMessage response = httpClient.GetAsync(USERINFO_ENDPOINT);
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)  //sign aout user after sign in, because token isn't persistent and is not included in header
+                {
+                    return httpClient.GetLoginAction();
+                }
+            }
+            AccountViewModel model = new AccountViewModel()
+            {
+                UserInfo = httpClient.GetUserInfo(),
+                PasswordChange = new PasswordChangeModel()
+            };
+
+            return View(model);
         }
 
-        [Authorize(Roles ="UserCreation")]
-        public IActionResult About()
+        [Authorize(Roles = SupportedRoles.OWN_USER_ACCOUNT_EDIT)]
+        public IActionResult SubmitChangePassword(AccountViewModel model)
         {
-            ViewData["Message"] = "Your application description page.";
-            
-            return View();
-        }
-
-        [Authorize(Roles = "blabla")]
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Logout()
-        {
-            return RedirectToAction("Login", "LoginController");
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            FormUrlEncodedContent content = new FormUrlEncodedContent(new Dictionary<string, string>()
+            {
+                { "oldPassword", model.PasswordChange.OldPassword },
+                { "newPassword", model.PasswordChange.NewPassword },
+            });
+            HttpResponseMessage response = httpClient.PostAsync(CHANGE_PASSWORD_ENDPOINT, content);
+            return RedirectToAction("Account");
         }
     }
 }

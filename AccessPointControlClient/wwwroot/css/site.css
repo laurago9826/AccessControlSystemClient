@@ -82,10 +82,56 @@ body {
     --component-text-color: #ffffff;
     --container-color: #262834;
     --container-color-dark: #17191f;
+    --border-radius: 5px;
+
+    --error-color: #a84032;
+    --success-color: #278f31;
 }
 
+#body-content {
+    padding: 16px 0px;
+}
 
+.form-input:checked ~ .custom-control-label::before {
+    background-color: black;
+}
 
+.generic-container {
+    border-radius: var(--border-radius);
+    background-color: var(--container-color);
+    padding: 20px;
+}
+
+.form-label {
+    color: var(--text-color);
+    display: block;
+}
+
+.form-input {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.form-button {
+    text-align: center;
+    width: 100%;
+    background-color: var(--brand-color);
+    border-width: 0;
+    border-radius: 5px;
+    color: var(--text-color);
+}
+.non-editable-input{
+    border-radius: var(--border-radius);
+    background-color: var(--container-color-dark);
+    padding: 8px;
+}
+.error-label {
+    font-size: 12px;
+    color: var(--error-color)
+}
+.success-label {
+    font-size: 12px;
+    color: var(--success-color)
+}
 
 
 /*LOGIN SCREEN*/
@@ -105,23 +151,6 @@ body {
 .login-form div {
     text-align: center;
 }
-
-.login-form .login-label {
-    color: var(--text-color);
-}
-
-.login-form .login-input {
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-.login-form .login-button {
-    text-align: center;
-    width: 100%;
-    background-color: var(--brand-color);
-    border-width: 0;
-    border-radius: 5px;
-}
 .login-form .server-inputs span,
 .login-form .server-inputs input {
     display: inline;
@@ -132,4 +161,109 @@ body {
     color: var(--brand-color);
     font-size: 24px;
     font-weight: bold;
+}
+
+
+/*LAYOUT*/
+.my-navbar {
+    background-color: var(--container-color) !important;
+    margin: 0px;
+    padding: 0px;
+}
+.my-navbar .nav-item {
+    margin: 10px 4px 0px 4px;
+    padding: 6px 8px 4px 8px;
+}
+.my-navbar a {
+   color: var(--text-color) !important;
+   text-decoration: none !important;
+}
+.my-navbar a img {
+   max-width: 24px;
+   margin-top: -10px;
+}
+.my-navbar a:hover {
+    color: var(--brand-color) !important;
+}
+.my-navbar .nav-item {
+    display: inline;
+    vertical-align: central;
+}
+.my-navbar .nav-item.active {
+    color: var(--brand-color) !important;
+    background-color: var(--container-color-dark) !important;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.user-info-container {
+    display: inline-block;
+    margin-top: 24px;
+}
+.user-info-container .main-title {
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+.user-info-container form {
+    min-width: 400px;
+    border-radius: 5px;
+    background-color: var(--container-color);
+    padding: 20px;
+}
+.user-info-container .title {
+    font-weight: bold;
+}
+.user-info-container form .form-label { 
+    font-size: 14px;
+}
+ .user-info-container form .form-input {
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+.user-info-container form .form-input input{
+    padding: 2px 4px;
+}
+.list-container {
+    margin-top: 12px;
+}
+.list-container .list-item {
+    display: block;
+    color: var(--text-color);
+    background-color: var(--container-color-dark);
+    border-radius: var(--border-radius);
+    border-width: 0px;
+    margin: 4px 0px;
+    padding: 6px 10px;
+    text-align: left;
+    width: 100%;
+}
+.list-item.active {
+    border-width: 1px;
+    border-color: var(--component-text-color);
+    color: var(--brand-color)
+}
+.register-form .form-input input {
+    border-radius: var(--border-radius);
+    border-width: 0px;
+    padding: 4px 10px;
+    display: block;
+    width: 100%;
+}
+.register-form .form-input {
+    margin-bottom: 8px;
+    margin-top: 4px;
+}
+.register-form button {
+    margin-top: 10px;
+}
+
+.white-content {
+    padding: 10px;
+    color: var(--container-color-dark);
+    background-color: var(--text-color);
+    border-radius: var(--border-radius);
+    width: 100%;
+    height: 100%;
+    white-space: pre-line;
 }

@@ -1,0 +1,37 @@
+﻿@model AccessPointControlClient.Models.UsersModel
+
+@using (Html.BeginForm("RegisterUser", "User", FormMethod.Post, new { @class = "register-form", role = "form" }))
+{
+    <div class="title pb-2"><span style="font-weight: bold">Register user</span></div>
+    <div>
+        <span class="form-label">Username</span>
+        <div class="form-input">
+            @Html.TextBoxFor(x => x.UserRegistrationModel.Username)
+            <span asp-validation-for="UserRegistrationModel.Username" class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <span class="form-label">Password</span>
+        <div class="form-input">
+            <input asp-for="UserRegistrationModel.Password" type="password">
+            <span asp-validation-for="UserRegistrationModel.Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <span class="form-label">Confirm password</span>
+        <div class="form-input">
+            <input asp-for="UserRegistrationModel.ConfirmPassword" type="password">
+            <span asp-validation-for="UserRegistrationModel.ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>
+    <span class="form-label">Roles</span>
+    @for (int i = 0; i < Model.UserRegistrationModel.RoleValues.Count(); i++)
+    {
+        <div>
+            @Html.CheckBoxFor(m => Model.UserRegistrationModel.RoleValues[i].IsSelected)
+            @Html.DisplayFor(m => Model.UserRegistrationModel.RoleValues[i].RoleName)
+            @Html.HiddenFor(m => Model.UserRegistrationModel.RoleValues[i].RoleName)
+        </div>
+    }
+    <button type="submit" class="btn form-button">Register</button>
+}

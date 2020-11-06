@@ -8,59 +8,15 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
-</head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApplication1</a>*@
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <span style="float: right">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
-                </span>
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            @*<p>&copy; 2020 - WebAppProofOfConcept</p>*@
-        </footer>
-    </div>
-
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery"
@@ -75,7 +31,51 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+</head>
+@RenderSection("Scripts", required: false)
+<body>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm box-shadow my-navbar" id="layout-header">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <span style="float: right">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                </span>
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString().Contains("Home") ? "active" : "")">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Account">
+                            <img src="@Url.Content("~/images/face.png")">
+                        </a>
+                    </li>
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString().Contains("Individual") ? "active" : "")">
+                        @Html.ActionLink("Registered individuals", "Individuals", "Individuals", new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString().Contains("User") ? "active" : "")">
+                        @Html.ActionLink("User management", "Users", "User", new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString().Contains("Log") ? "active" : "")">
+                        @Html.ActionLink("Logs", "Logs", "Logs", new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item @(ViewContext.RouteData.Values["Controller"].ToString().Contains("Debug") ? "active" : "")">
+                        @Html.ActionLink("Debug", "Debug", "Debug", new { @class = "nav-link" })
+                    </li>
+                </ul>
 
-    @RenderSection("Scripts", required: false)
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content" id="body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            @*<p>&copy; 2020 - WebAppProofOfConcept</p>*@
+        </footer>
+    </div>
+
+
 </body>
 </html>

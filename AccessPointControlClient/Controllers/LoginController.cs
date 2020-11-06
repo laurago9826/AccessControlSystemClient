@@ -18,20 +18,20 @@ namespace AccessPointControlClient.Controllers
         }
         public IActionResult Logout()
         {
-            httpClient.Logout(HttpContext);
+            httpClient.Logout();
             return RedirectToAction("Login");
         }
 
         public IActionResult Login()
         {
+            ViewData["Title"] = "Access point control system";
             return View(new LoginModel());
         }
 
         public IActionResult SubmitLoginData(LoginModel loginModel)
         {
-           httpClient.Login(loginModel, HttpContext);
-            return httpClient.GetDefaultAction();
-
+           httpClient.Login(loginModel);
+           return httpClient.GetDefaultAction();
         }
     }
 }

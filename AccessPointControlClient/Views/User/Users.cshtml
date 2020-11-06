@@ -1,0 +1,63 @@
+﻿@model AccessPointControlClient.Models.UsersModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "User management";
+}
+
+<div class="container generic-container">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn form-button" id="newButton">New</button>
+                    </div>
+                    <div class="col-6">
+                        @using (Html.BeginForm("DeleteUser", "User", FormMethod.Post))
+                        {
+                            @Html.Hidden("selectedUserId", Model.SelectedUser.Id)
+                            <input type="submit" value="Delete" class="btn form-button" />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="list-container">
+                @foreach (UserDetailsModel user in Model.Users)
+                {
+                    @*<div style="margin: 1px; background-color: red;" onclick="location.href='@Url.Action("SelectUser", "Home", new { selectedUserId = user.Id })'">
+                        @user.Username
+                    </div>*@
+                    @using (Html.BeginForm("SelectUser", "User", FormMethod.Post))
+                    {
+                        @Html.Hidden("selectedUserId", user.Id)
+                        <input type="submit" value="@user.Username" class="list-item @(Model.SelectedUser.Username == user.Username ? "active" : "")" />
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div id="user-details-form">
+                <partial name="Users_Details.cshtml" for="@Model">
+            </div>
+            <div id="user-registration-form" style="display:none">
+                <partial name="Users_Registration.cshtml" for="@Model">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(function () {
+
+                $('#newButton').click(function (event) {
+                    $('#user-details-form').css('display', 'none');
+                    $('#user-registration-form').css('display', 'block');
+                });
+            });
+        });
+    </script>
+}

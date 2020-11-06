@@ -1,0 +1,37 @@
+﻿@model AccessPointControlClient.Models.DebugInfo
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Debug";
+}
+
+<div class="container generic-container user-info-container">
+    <div class="row">
+        <div class="col-sm-6">
+            <span class="main-title">Last evaluation info</span>
+            <div class="form-input non-editable-input">
+                <span>@Model.Info</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <span class="form-label">Exracted palm image</span>
+            <div class="form-input non-editable-input" style="display:inline-block">
+                <img src="data:image/gif;base64,@Model.DebugPalmImageSource" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <span class="form-label">Hand geometry points</span>
+            <div class="form-input non-editable-input" style="display:inline-block">
+                <img src="data:image/gif;base64,@Model.DebugHandGeometryImageSource" />
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <span class="form-label">Captured image</span>
+            <div class="form-input non-editable-input" style="display:inline-block">
+                <img src="data:image/gif;base64,@Model.OriginalImageSource" />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+﻿@model AccessPointControlClient.Models.UsersModel
+
+<form method="post">
+    <div class="title pb-2"><span style="font-weight: bold">User Details</span></div>
+    <div>
+        <span class="form-label">Id</span>
+        <div class="form-input non-editable-input">
+            <span>@Model.SelectedUser.Id</span>
+        </div>
+        <span class="form-label">Username</span>
+        <div class="form-input non-editable-input">
+            <span>@Model.SelectedUser.Username</span>
+        </div>
+    </div>
+    <span class="form-label">Roles</span>
+    @for (int i = 0; i < Model.SelectedUser.RoleValues.Count(); i++)
+    {
+        <div>
+            @Html.CheckBoxFor(m => Model.SelectedUser.RoleValues[i].IsSelected)
+            @Html.DisplayFor(m => Model.SelectedUser.RoleValues[i].RoleName)
+            @Html.HiddenFor(m => Model.SelectedUser.RoleValues[i].RoleName)
+        </div>
+    }
+    @Html.HiddenFor(m => Model.SelectedUser.Id)
+    @Html.HiddenFor(m => Model.SelectedUser.Username)
+    <button style="margin-top: 8px;" type="submit" class="btn form-button" asp-controller="User" asp-action="UpdateUser">Save</button>
+</form>
+

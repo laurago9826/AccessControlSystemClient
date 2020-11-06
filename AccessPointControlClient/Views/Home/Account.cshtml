@@ -1,0 +1,25 @@
+﻿@model AccessPointControlClient.Models.AccountViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "My account";
+}
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
+
+<div class="container generic-container user-info-container">
+    <div class="row">
+        <div class="col-sm-6">
+            <span class="main-title">Account information</span>
+            <span class="form-label">Username</span>
+            <div class="form-input non-editable-input">
+                <span>@Model.UserInfo.Username</span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <partial name="Account_ChangePassword.cshtml" for="PasswordChange">
+        </div>
+    </div>
+</div>

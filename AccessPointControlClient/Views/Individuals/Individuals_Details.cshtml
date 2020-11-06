@@ -1,0 +1,44 @@
+﻿@model AccessPointControlClient.Models.IndividualsModel
+
+<form method="post" class="register-form">
+    <div class="title pb-2"><span style="font-weight: bold">Person Details</span></div>
+    <div>
+        <span class="form-label">Id</span>
+        <div class="form-input non-editable-input">
+            <span>@Model.SelectedIndividual.PersonId</span>
+        </div>
+        <span class="form-label">Full name</span>
+        <div class="form-input">
+            @Html.TextBoxFor(x => x.SelectedIndividual.FullName)
+        </div>
+        <span class="form-label">Birth date</span>
+        <div class="form-input">
+            @Html.TextBoxFor(model => model.SelectedIndividual.BirthDate,
+        new { @type = "date", @Value = Model.SelectedIndividual.BirthDate.ToString("yyyy-MM-dd") })
+        </div>
+        <button style="margin-top: 8px; @(Model.SelectedIndividual.RequiresImageUpload ? "display:none" : "")" type="submit"
+                class="btn form-button" asp-controller="Individuals" asp-action="UpdateIndividual">
+            Update
+        </button>
+        @if (!Model.SelectedIndividual.RequiresImageUpload)
+        {
+            <span class="form-label">Processed palm image</span>
+            <div class="form-input non-editable-input" style="display:inline-block">
+                <img src="data:image/gif;base64,@Model.SelectedIndividual.ProcessedPalmImageSource" />
+            </div>
+            <span class="form-label">Hand geometry image</span>
+            <div class="form-input non-editable-input" style="display:inline-block">
+                <img src="data:image/gif;base64,@Model.SelectedIndividual.HandGeometryDebugImageSource" />
+            </div>
+        }
+        @Html.HiddenFor(m => m.SelectedIndividual.PersonId)
+        @Html.HiddenFor(m => m.SelectedIndividual.HandGeometryDebugImageSource)
+        @Html.HiddenFor(m => m.SelectedIndividual.ProcessedPalmImageSource)
+    </div>
+    @if (Model.SelectedIndividual.RequiresImageUpload)
+    {
+        <div id="counter-container" class="m3" style="font-size: 22px;font-weight: bold;">
+            @Html.ValueFor(x => x.SelectedIndividual.Counter)
+        </div>
+    }
+</form>

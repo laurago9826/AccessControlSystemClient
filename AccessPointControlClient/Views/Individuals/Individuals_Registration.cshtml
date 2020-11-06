@@ -1,0 +1,22 @@
+﻿@model AccessPointControlClient.Models.IndividualsModel
+
+@using (Html.BeginForm("RegisterIndividual", "Individuals", FormMethod.Post, new { @class = "register-form", role = "form" }))
+{
+    <div class="title pb-2"><span style="font-weight: bold">Register person</span></div>
+    <div>
+        <span class="form-label">Full name</span>
+        <div class="form-input">
+            @Html.TextBoxFor(x => x.RegistrationModel.FullName)
+            <span asp-validation-for="RegistrationModel.FullName" class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <span class="form-label">Birth date</span>
+        <div class="form-input">
+            @Html.TextBoxFor(model => model.SelectedIndividual.BirthDate,
+    new { @type = "date", @Value = Model.SelectedIndividual.BirthDate.ToString("yyyy-MM-dd") })
+        </div>
+    </div>
+    <span>After registration you will have 1 minute to capture an image or the registration will be discarded</span>
+    <button type="submit" class="btn form-button">Register</button>
+}

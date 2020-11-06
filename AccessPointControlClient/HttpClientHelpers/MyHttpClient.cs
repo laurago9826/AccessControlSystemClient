@@ -1,23 +1,31 @@
 ﻿using AccessPointControlClient.Models;
+using ICSharpCode.Decompiler.Util;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
+using System.Resources;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AccessPointControlClient.HttpClientHelpers
 {
+
     public class MyHttpClient : IHttpClient
     {
+        private IHttpContextAccessor httpContextAccessor;
+
         private readonly IActionResult loginAction = new RedirectToActionResult("Login", "Login", null);
-        private readonly IActionResult defaultAction = new RedirectToActionResult("Index", "Home", null);
+        private readonly IActionResult defaultAction = new RedirectToActionResult("Account", "Home", null);
         private HttpClient httpClient = new HttpClient();
         private UserInfo userInfo;
         private string serverBaseUrl;
@@ -25,6 +33,21 @@ namespace AccessPointControlClient.HttpClientHelpers
         private const string LOGIN_ENDPOINT = "login";
         private const string USERINFO_ENDPOINT = "accounts/user-info";
 
+        public MyHttpClient(IHttpContextAccessor httpContextAccessor)
+        {
+            this.httpContextAccessor = httpContextAccessor;
+            httpContextAccessor.HttpContext.SignOutAsync(); //sign aout user after sign in, because token isn't persistent and is not included in header
+
+            httpClient.DefaultRequestHeaders
+                      .Accept
+                      .Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+
+            Dictionary<string, string> data = ReadPropertiesFile("properties.txt");
+            data.TryGetValue("server", out string server);
+            data.TryGetValue("port", out string port);
+            SetServerBaseUrl(server, int.Parse(port), false);
+
+        }
         public IActionResult GetDefaultAction()
         {
             return defaultAction;
@@ -40,9 +63,16 @@ namespace AccessPointControlClient.HttpClientHelpers
             return serverBaseUrl;
         }
 
-        private void SetServerBaseUrl(string ip, int port)
+        private void SetServerBaseUrl(string ip, int port, bool updateProperties)
         {
             this.serverBaseUrl = "http://" + ip + ":" + port + "/api/";
+            Dictionary<string, string> data = new Dictionary<string, string>()
+            {
+                { "server", ip },
+                { "port", port.ToString() }
+            };
+            if(updateProperties)
+                WriteToPropertiesFile("properties.txt", data);
         }
 
         public void AddTokenToHeader(string token)
@@ -50,9 +80,9 @@ namespace AccessPointControlClient.HttpClientHelpers
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
-        public bool Login(LoginModel loginModel, HttpContext httpContext)
+        public bool Login(LoginModel loginModel)
         {
-            SetServerBaseUrl(loginModel.ServerIP, loginModel.Port);
+            SetServerBaseUrl(loginModel.ServerIP, loginModel.Port, true);
             //GET TOKEN
             FormUrlEncodedContent content = new FormUrlEncodedContent(new Dictionary<string, string>()
             {
@@ -75,6 +105,7 @@ namespace AccessPointControlClient.HttpClientHelpers
                 return false;
             }
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            httpContextAccessor.HttpContext.Request.Headers.Add(new KeyValuePair<string, StringValues>("Authorization", "Bearer " + token));
 
             //GET USER INFO
             response = GetAsync(USERINFO_ENDPOINT);
@@ -84,7 +115,7 @@ namespace AccessPointControlClient.HttpClientHelpers
             }
             this.userInfo = JsonConvert.DeserializeAnonymousType(response.Content.ReadAsStringAsync().Result, this.userInfo);
 
-            //BUILD CLAIMS PRINCIPAL
+            //CREATE CLAIMS PRINCIPAL
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, userInfo.Username));
             userInfo.Roles.ForEach(r => claims.Add(new Claim(ClaimTypes.Role, r)));
@@ -92,24 +123,18 @@ namespace AccessPointControlClient.HttpClientHelpers
             ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
             DateTimeOffset currentUtc = new SystemClock().UtcNow;
-            httpContext.SignInAsync(principal, new AuthenticationProperties()
-            { ExpiresUtc = currentUtc.AddSeconds(expiresIn)});
+            httpContextAccessor.HttpContext.SignInAsync(principal, new AuthenticationProperties()
+            { ExpiresUtc = currentUtc.AddSeconds(expiresIn) });
+            
             return true;
         }
 
-        public void Logout(HttpContext httpContext)
+        public void Logout()
         {
             this.userInfo = null;
-            httpContext.SignOutAsync();
+            httpContextAccessor.HttpContext.SignOutAsync();
             this.httpClient.DefaultRequestHeaders.Authorization = null;
         }
-
-
-        public bool IsUserLoggedIn()
-        {
-            return userInfo != null;
-        }
-
 
         public HttpResponseMessage PostAsync(string endPointSuffixUri, HttpContent content)
         {
@@ -119,6 +144,36 @@ namespace AccessPointControlClient.HttpClientHelpers
         public HttpResponseMessage GetAsync(string endPointSuffixUri)
         {
             return httpClient.GetAsync(new Uri(GetServerBaseUrl() + endPointSuffixUri)).Result;
+        }
+
+        public HttpResponseMessage DeleteAsync(string endPointSuffixUri)
+        {
+            return httpClient.DeleteAsync(new Uri(GetServerBaseUrl() + endPointSuffixUri)).Result;
+        }
+
+        private static Dictionary<string, string> ReadPropertiesFile(string path)
+        {
+            var data = new Dictionary<string, string>();
+            foreach (var row in File.ReadAllLines(path))
+                data.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
+            return data;
+        }
+
+        private static void WriteToPropertiesFile(string path, Dictionary<string, string> data)
+        {
+            using (StreamWriter sw = new StreamWriter(path, false))
+            {
+                foreach (var d in data)
+                {
+                    sw.WriteLine(d.Key + "=" + d.Value);
+                }
+            }
+
+        }
+
+        public UserInfo GetUserInfo()
+        {
+            return userInfo;
         }
     }
 }

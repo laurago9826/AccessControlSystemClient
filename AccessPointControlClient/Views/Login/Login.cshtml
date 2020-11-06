@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebAppProofOfConcept</title>
+    <title>@ViewData["Title"]</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -23,8 +23,8 @@
         <form class="login-form" method="post">
             <div class="title"><span>Login</span></div>
             <div>
-                <span class="login-label">Server URL</span>
-                <div class="login-input server-inputs">
+                <span class="form-label">Server URL</span>
+                <div class="form-input server-inputs">
                     <span style="display: inline; width: 20%">http://</span>
                     <input class="form-control col-7" style="display: inline; width: 50%" asp-for="ServerIP" type="text">
                     <span style="display: inline; width: 10%">:</span>
@@ -32,18 +32,18 @@
                 </div>
             </div>
             <div>
-                <span class="login-label">Username</span>
-                <div class="login-input">
+                <span class="form-label">Username</span>
+                <div class="form-input">
                     <input asp-for="Username" type="text" class="form-control">
                 </div>
             </div>
             <div>
-                <span class="login-label">Password</span>
-                <div class="login-input">
+                <span class="form-label">Password</span>
+                <div class="form-input">
                     <input asp-for="Password" type="password" class="form-control">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary login-button" asp-controller="Login" asp-action="SubmitLoginData">Login</button>
+            <button type="submit" class="btn btn-primary form-button" asp-controller="Login" asp-action="SubmitLoginData">Login</button>
         </form>
         @*<footer>
                 <p>&copy; 2020 - WebAppProofOfConcept</p>

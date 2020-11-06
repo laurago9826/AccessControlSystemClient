@@ -1,0 +1,26 @@
+﻿@model AccessPointControlClient.DTO.LogsDTO
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Logs";
+}
+
+<div class="container generic-container" style="height: 100%">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="list-container">
+                @foreach (AccessPointControlClient.DTO.LogEntry log in Model.LogContent)
+                {
+                    @using (Html.BeginForm("SelectLogFile", "Logs", FormMethod.Post))
+                    {
+                        @Html.Hidden("logFile", log.FileName)
+                        <input type="submit" value="@log.FileName" class="list-item @(Model.SelectedEntry.FileName == log.FileName ? "active" : "")" />
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-sm-8 generic-container">
+            <div class="white-content">@Model.SelectedEntry.FileContent</div>
+        </div>
+    </div>
+</div>
