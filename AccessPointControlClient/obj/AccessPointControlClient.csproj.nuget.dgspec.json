@@ -48,10 +48,6 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[12.0.3, )"
-            },
-            "jQuery.UI": {
-              "target": "Package",
-              "version": "[1.12.1.1, )"
             }
           },
           "imports": [

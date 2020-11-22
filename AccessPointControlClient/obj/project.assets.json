@@ -29,15 +29,6 @@
           "lib/netstandard2.0/ICSharpCode.Decompiler.dll": {}
         }
       },
-      "jQuery/1.12.4": {
-        "type": "package"
-      },
-      "jQuery.UI/1.12.1.1": {
-        "type": "package",
-        "dependencies": {
-          "jQuery": "1.12.4"
-        }
-      },
       "Microsoft.NETCore.Platforms/1.1.0": {
         "type": "package",
         "compile": {
@@ -1295,47 +1286,6 @@
         "lib/netstandard2.0/ICSharpCode.Decompiler.dll",
         "lib/netstandard2.0/ICSharpCode.Decompiler.pdb",
         "lib/netstandard2.0/ICSharpCode.Decompiler.xml"
-      ]
-    },
-    "jQuery/1.12.4": {
-      "sha512": "pIYtWlFI5PGlJVB8jm9H96pAQ27jQhA9sCxMeGweeC3ByQRaB8BwkIuGdTt4go3IEKTmmfRC2y5k0FLFizWDQg==",
-      "type": "package",
-      "path": "jquery/1.12.4",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Content/Scripts/jquery-1.12.4-vsdoc.js",
-        "Content/Scripts/jquery-1.12.4.js",
-        "Content/Scripts/jquery-1.12.4.min.js",
-        "Content/Scripts/jquery-1.12.4.min.map",
-        "Tools/common.ps1",
-        "Tools/install.ps1",
-        "Tools/jquery-1.12.4.intellisense.js",
-        "Tools/uninstall.ps1",
-        "jquery.1.12.4.nupkg.sha512",
-        "jquery.nuspec"
-      ]
-    },
-    "jQuery.UI/1.12.1.1": {
-      "sha512": "E+n7ILz0Pl7gGiPUXcMvdMtr8eIa8FPByfaoParBTLYFNtaNj9QA6gpD3IdWe9tARMNkpHCVmZ0Xo//kXh38Vg==",
-      "type": "package",
-      "path": "jquery.ui/1.12.1.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Content/Content/images/ui-icons_444444_256x240.png",
-        "Content/Content/images/ui-icons_555555_256x240.png",
-        "Content/Content/images/ui-icons_777620_256x240.png",
-        "Content/Content/images/ui-icons_777777_256x240.png",
-        "Content/Content/images/ui-icons_cc0000_256x240.png",
-        "Content/Content/images/ui-icons_ffffff_256x240.png",
-        "Content/Content/jquery-ui.css",
-        "Content/Content/jquery-ui.structure.css",
-        "Content/Content/jquery-ui.theme.css",
-        "Content/Scripts/jquery-ui.js",
-        "jquery.ui.1.12.1.1.nupkg.sha512",
-        "jquery.ui.nuspec"
       ]
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
@@ -4632,8 +4582,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "ICSharpCode.Decompiler >= 6.2.1.6137",
-      "Newtonsoft.Json >= 12.0.3",
-      "jQuery.UI >= 1.12.1.1"
+      "Newtonsoft.Json >= 12.0.3"
     ]
   },
   "packageFolders": {
@@ -4684,10 +4633,6 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[12.0.3, )"
-          },
-          "jQuery.UI": {
-            "target": "Package",
-            "version": "[1.12.1.1, )"
           }
         },
         "imports": [

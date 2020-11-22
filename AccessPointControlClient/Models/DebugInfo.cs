@@ -23,9 +23,9 @@ namespace AccessPointControlClient.Models
         public DebugInfo(DebugInfoDTO info)
         {
             this.Info = info.Info;
-            this.DebugHandGeometryImageSource = Convert.ToBase64String(info.DebugHandGeometryImage);
-            this.DebugPalmImageSource = Convert.ToBase64String(info.DebugPalmImage);
-            this.OriginalImageSource = Convert.ToBase64String(info.OriginalImage);
+            this.DebugHandGeometryImageSource = info.DebugHandGeometryImage == null ? "" : Convert.ToBase64String(info.DebugHandGeometryImage);
+            this.DebugPalmImageSource = info.DebugPalmImage == null ? "" : Convert.ToBase64String(info.DebugPalmImage);
+            this.OriginalImageSource = info.OriginalImage == null ? "" : Convert.ToBase64String(info.OriginalImage);
         }
 
         public static DebugInfo CreateEmptyDebugInfo()
